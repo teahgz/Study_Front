@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML태그접근</title>
+</head>
+<body>
+    <style>
+        /* 스타일 지정 */
+        #idTarget{
+            width: 100px;
+            border: 2px dotted darkorange;
+        }
+    </style>
+    <h1>document.getElementById();</h1>
+     <diV id="idTarget"> id기준 접근</diV>
+    <input type="button" value="빨갛게" onclick="turnRed();">
+    <script>
+        function turnRed(){
+            // id 가 idtarget인 요소까지 접근 해서 컬러의 style을 빨간색으로 바꿔줘라
+            var test = document.getElementById('idTarget');
+            test.style.color = 'red';
+        }
+    </script>
+
+    <h1>getElementsByClassName();</h1>
+    <p class="a">p1</p>
+    <span class="b a">span1</span>
+    <p class="c">p2</p>
+    <div class="a b c">div1</div>
+    <input type="button" value="a클래스" onclick="changeOnly();">
+    <input type="button" value="b클래스" onclick="changeOnly1();">
+    <input type="button" value="c클래스" onclick="changeOnly2();">
+    <script>
+        function changeOnly(){
+            var el = document.getElementsByClassName('a');
+            console.log(el);
+            // 클래스가 a인 요소들의 스타일을 변경해줘라
+            for(var i = 0 ; i < el.length ;i++){
+                el[i].style.color='yellow';
+            }
+        }
+        function changeOnly1(){
+            var eb = document.getElementsByClassName('b');
+            // 클래스가 b인 요소들의 배경색을 blue로 변경
+            for(var i = 0 ; i < eb.length ; i++){
+                eb[i].style.backgroundColor='blue';
+            }
+        }
+        function changeOnly2(){
+            var ec = document.getElementsByClassName('c');
+            // 클래스가 c인 요소들 변경
+            for(var i = 0 ; i < ec.length ; i++){
+                ec[i].style.fontSize='30px';
+                ec[i].style.color='green';
+            }
+        }
+    </script>
+
+    <h1>getElementsByTagName();</h1>
+    <ul>
+        <li>html</li>
+        <li>css</li>
+        <li>JavaScript</li>
+    </ul>
+    <button type="button" onclick="changeJSblue();">JS좋아</button>
+    <script>
+        function changeJSblue(){
+            var tagEl = document.getElementsByTagName('li');
+            // li 의 인덱스 2번 컬러 변경
+            tagEl[2].style.color='blue';
+            for(var i = 0;i<tagEl.length;i++){
+                console.log(tagEl[i]);
+            }
+        }
+    </script>
+
+    <h1>getElementsByName</h1>
+    <label><input type="checkbox" name="food" value="1"> 짜장면 </label><br>
+    <label><input type="checkbox" name="food" value="2"> 짬뽕 </label><br>
+    <label><input type="checkbox" name="food" value="3"> 탕수육 </label>
+    <button onclick="addService();"> 탕수육 서비스 </button>
+    <script>
+    // checked 는 속성의 명칭만 있으면 따로 쓰지 않아도 적용이 가능
+        function addService(){
+          var nameEl = document.getElementsByName('food');
+          // food 의 2번 인덱스가 true 라면 체크
+          nameEl[2].checked = true;
+          var checkedStatus = nameEl[2].checked;
+          console.log(checkedStatus);
+        }
+    </script>
+
+    <h1>querySelector,querySelectorAll</h1>
+    <button onclick="practiceQuery();">유일한 요소</button>
+    <script>
+        function practiceQuery(){
+            var one = document.querySelector('#idTarget');
+            one.style.color='orange';
+            // 제일 위에 있는 a만 가져와짐 
+            // 여러개의 요소를 가지고 올 수 있던 클래스지만
+            // 하나만 가져오고싶은 아이들만 입력하면 제일 위에 있는 친구만 데리고온다
+            var three = document.querySelectorAll('.a');
+            console.log(three);
+            for(var i = 0; i < three.length;i++){
+                three[i].style.color='red';
+            }
+        }
+    </script>
+
+    <h1>value :  값을 가져오고, 바꾸기</h1>
+    <input type="text" id="user_name"  value="김철수">
+    <input type="button" value="값 가져오기" onclick="getValue();">
+    <input type="button" value="값 변경하기" onclick="setValue();">
+    <script>
+        function getValue(){
+            // user_name에 접근
+            var userName = document.getElementById('user_name');
+            // 값 넣을 결과를 넣고 alert 로 출력
+            var userNameVal = userName.value;
+            alert(userNameVal);
+        }
+        function setValue(){
+            var userEld = document.getElementById('user_name');
+            userEld.value = '이영희';
+            // 위 아리 둘 다 사용 가능
+            document.getElementById('user_name').value = '이영희';
+        }
+    </script>
+
+    <h1>style : 값 가져오고, 바꾸기</h1>
+     <input type="button" value="스타일" onclick="changeStyle();" id = "style_btn">
+     <style>
+        input[type="button"]{
+            background-color: cornflowerblue;
+        }
+     </style>
+     <script>
+        function changeStyle(){
+            var styleEle = document.getElementById('user_name');
+            styleEle.style.backgroundColor = 'gold';
+            // 가져오기(inlined방식일때만 )
+            var styleEleBack = styleEle.style.backgroundColor;
+            console.log(styleEleBack);
+            // 가져오기(inlined외의 방식 )
+            var basicStyle = document.getElementById('style_btn');
+            // basicStyle = basicStyle.style.backgroundColor;
+            // 해당 요소에 접근하고 스타일을 적용해도 안되면 getComputed 넣어주기
+                // 괄호안에 접근할 대상 넣어주기
+            basicStyle = getComputedStyle(basicStyle).backgroundColor;
+            console.log(basicStyle);
+            }
+     </script>
+
+    <h1>innerHTML</h1>
+     <!-- 특정 요소 내부에 다른 요소가 있는 경우 -->
+     <div id="test1">
+        <p>Hello!</p>
+     </div>
+     <!-- 특정 요소 내부에 텍스트만 있는 경우 -->
+      <div id = "test2">
+        Hello!!
+      </div>
+      <input type="button" value="가져오기" onclick="getTag();">
+      <input type="button" value="변경하기" onclick="setTag();">
+      <script>
+        function getTag(){
+            // innerHTML은 적혀있는 코드를 그대로 가져오기 때문에 가지고 올 때의 의미가 없다 (변수할당해도 됨)
+            var test1 = document.getElementById('test1').innerHTML;
+            var test2 = document.getElementById('test2').innerHTML;
+            console.log(test1);
+            console.log(test2);
+        }
+        function setTag(){
+            // 대입연산자는 요소 내부 콘첸츠 변경
+            // innerHTML을 썼을 때 id가 test1이라는 들어가는 요소가 즉 h1이라는 거다
+            document.getElementById('test1').innerHTML = '<h1>Hello~</h1>';
+            // 복합 대입 연산자 += 요소 내부 콘텐츠 추가
+            document.getElementById('test1').innerHTML += '<h1>Hello~</h1>';
+            // document.getElementById('test2').innerHTML ='<h2>Bye</h2>';
+            document.getElementById('test2').innerHTML ='문자 컨텐츠';
+            
+        }
+      </script>
+
+      <h1>innerText</h1>
+      <input type="button" value="가져오기" onclick="getText();">
+      <input type="button" value="변경하기" onclick="setText();">
+      <script>
+        function getText(){
+            // 내부의 특정 요소(다른요소)가 있더라도 글자 정보만 가져온다 
+            var test3 = document.getElementById('test1').innerText;
+            var test4 = document.getElementById('test2').innerText;
+            console.log(test3);
+            console.log(test4);   
+        }
+
+        function setText(){
+            // innerText는 문자데이터만 가능하다
+            document.getElementById('test1').innerText = '<h1>Change</h1>';
+            document.getElementById('test2').innerText = '정말 많이 반가워요~';
+        }
+      </script>
+</body>
+</html>
